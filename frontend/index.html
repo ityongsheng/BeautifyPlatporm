@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>遇见美 - 智享美妆推荐</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="bg-container">
+        <div class="bg-pattern pattern-1"></div>
+        <div class="bg-pattern pattern-2"></div>
+    </div>
+
+    <!-- Login Card -->
+    <div id="login-card" class="login-container">
+        <h1>遇见美</h1>
+        <p class="subtitle">属于你的专属智能美妆顾问</p>
+
+        <form id="login-form">
+            <div class="input-group">
+                <label for="username">用户名 / 手机号</label>
+                <input type="text" id="username" placeholder="请输入你的账号" required>
+            </div>
+            <div class="input-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" placeholder="请输入你的密码" required>
+            </div>
+
+            <button type="submit" class="login-btn">开启美丽之旅</button>
+        </form>
+
+        <div class="switch-mode">
+            还没有账户？ <a href="#" id="go-register">立即注册</a>
+        </div>
+    </div>
+
+    <!-- Onboarding Card (Skin Quiz) -->
+    <div id="onboarding-card" class="login-container onboarding-card">
+        <div class="step-indicator">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
+            <div class="step-dot"></div>
+        </div>
+
+        <div id="step-1">
+            <h1>了解你的肤质</h1>
+            <p class="subtitle">精准推荐的第一步，告诉我们你的真实感受</p>
+
+            <div class="choice-grid">
+                <div class="choice-item" data-value="oil">
+                    <i>✨</i>
+                    <span>油性皮肤</span>
+                </div>
+                <div class="choice-item" data-value="dry">
+                    <i>🌵</i>
+                    <span>干性皮肤</span>
+                </div>
+                <div class="choice-item" data-value="sensitive">
+                    <i>🛡️</i>
+                    <span>敏感肌肤</span>
+                </div>
+                <div class="choice-item" data-value="combination">
+                    <i>⚖️</i>
+                    <span>混合性皮肤</span>
+                </div>
+            </div>
+
+            <button class="login-btn next-step">开始分析</button>
+        </div>
+    </div>
+
+    <!-- Main Application View -->
+    <div id="main-app" class="main-app" style="display: none;">
+        <nav>
+            <div class="logo" style="font-weight: 700; font-size: 1.4rem; color: var(--accent-color)">遇见美</div>
+            <div class="nav-links">
+                <a href="#" class="active" id="nav-home">智能首页</a>
+                <a href="#" id="nav-rankings">热门榜单</a>
+                <a href="#" id="nav-chat">AI 顾问</a>
+                <a href="#" id="nav-profile">个人中心</a>
+            </div>
+            <div class="user-status" style="font-size: 0.9rem; color: #888">
+                <span>我的肤质: <strong id="user-skin-tag">-</strong></span>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <!-- Home Section -->
+            <section id="section-home">
+                <!-- New Hero Banner -->
+                <div class="hero-banner">
+                    <div class="hero-text">
+                        <h2 id="home-welcome">你好，<span class="user-name-span">美妆达人</span> ✨</h2>
+                        <p>今天也是精致的一天！AI 已根据你的肤质准备好了今日推荐。</p>
+                        <button class="login-btn" style="width: auto; margin-top: 15px; padding: 10px 20px;"
+                            onclick="window.switchSection('chat')">咨询 AI 顾问</button>
+                    </div>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="category-tabs">
+                    <div class="tab-item active" data-cat="all">全部</div>
+                    <div class="tab-item" data-cat="skincare">护肤品</div>
+                    <div class="tab-item" data-cat="makeup">彩妆</div>
+                    <div class="tab-item" data-cat="mask">面膜</div>
+                    <div class="tab-item" data-cat="tools">美容仪器</div>
+                </div>
+
+                <!-- Trending / Featured Grid -->
+                <div class="featured-header">
+                    <h3 class="section-subtitle">为你甄选</h3>
+                    <span class="view-all">查看全部 ></span>
+                </div>
+                <div class="product-grid" id="product-list">
+                    <!-- Products will be injected here -->
+                </div>
+
+                <!-- Daily Skincare Knowledge / Tips -->
+                <div class="daily-tips-section">
+                    <h3>💡 今日护肤锦囊</h3>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-icon">💧</div>
+                            <div class="tip-content">
+                                <h4>晨间补水</h4>
+                                <p>洁面后3分钟内涂抹保湿产品，水分吸收效果提升50%。</p>
+                            </div>
+                        </div>
+                        <div class="tip-card">
+                            <div class="tip-icon">☀️</div>
+                            <div class="tip-content">
+                                <h4>防晒重点</h4>
+                                <p>即便阴天也有紫外线，敏感肌推荐物理防晒，减少负担。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rankings Section -->
+            <section id="section-rankings" style="display: none;">
+                <h2 class="section-title">美妆排行榜</h2>
+                <div class="ranking-list" id="ranking-list">
+                    <!-- Rankings will be injected here -->
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section id="section-chat" style="display: none; height: 100%;">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai">
+                            你好！我是你的专属 AI 美妆顾问。你可以问我关于护肤步奏、成分选择或者肤质改善的任何问题。
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="向 AI 顾问提问...">
+                        <button class="login-btn" id="send-chat"
+                            style="width: auto; margin-top: 0; padding: 10px 25px;">咨询</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="section-profile" style="display: none;">
+                <div class="profile-dashboard">
+                    <div class="profile-header">
+                        <div class="avatar-large">👤</div>
+                        <div class="profile-info">
+                            <h2 id="profile-name">加载中...</h2>
+                            <span class="badge" id="profile-skin-badge">中性皮肤</span>
+                        </div>
+                    </div>
+                    <div class="stats-container">
+                        <div class="chart-card">
+                            <h3>肤质多维度深度分析</h3>
+                            <div id="skin-radar-chart" style="width: 100%; height: 350px;"></div>
+                        </div>
+                        <div class="history-card">
+                            <h3>最近足迹</h3>
+                            <ul class="history-list" id="history-list">
+                                <li class="history-item">暂无浏览记录</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body" id="modal-body-content">
+                <!-- Data will be injected -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
