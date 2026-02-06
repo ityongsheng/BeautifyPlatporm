@@ -1,0 +1,138 @@
+[
+    {
+        "name": "烟酰胺",
+        "aliases": [
+            "尼克酰胺",
+            "维生素B3"
+        ],
+        "benefits": "美白、控油、修护皮肤屏障、改善黄气",
+        "risks": "高浓度可能引起皮肤过敏（不耐受）",
+        "suitable_skin": [
+            "oil",
+            "normal",
+            "combination"
+        ],
+        "unsuitable_skin": [
+            "sensitive"
+        ]
+    },
+    {
+        "name": "视黄醇",
+        "aliases": [
+            "A醇",
+            "维A醇"
+        ],
+        "benefits": "抗衰老、淡化细纹、促进胶原蛋白再生",
+        "risks": "具有刺激性，需建立耐受，避光使用",
+        "suitable_skin": [
+            "normal",
+            "dry"
+        ],
+        "unsuitable_skin": [
+            "sensitive"
+        ]
+    },
+    {
+        "name": "透明质酸",
+        "aliases": [
+            "玻尿酸"
+        ],
+        "benefits": "深层补水、抓水保湿、平滑肌肤",
+        "risks": "极低，适合绝大多数人",
+        "suitable_skin": [
+            "all"
+        ],
+        "unsuitable_skin": []
+    },
+    {
+        "name": "水杨酸",
+        "aliases": [
+            "BHA"
+        ],
+        "benefits": "深度去油、疏通毛孔、改善黑头粉刺",
+        "risks": "可能导致皮肤干燥或脱皮",
+        "suitable_skin": [
+            "oil"
+        ],
+        "unsuitable_skin": [
+            "dry",
+            "sensitive"
+        ]
+    },
+    {
+        "name": "积雪草",
+        "aliases": [
+            "老虎草"
+        ],
+        "benefits": "舒缓镇静、去红修护、促进伤口愈合",
+        "risks": "极低",
+        "suitable_skin": [
+            "sensitive",
+            "all"
+        ],
+        "unsuitable_skin": []
+    },
+    {
+        "name": "神经酰胺",
+        "aliases": [],
+        "benefits": "修护皮肤屏障、锁水、增强皮肤抵抗力",
+        "risks": "极低",
+        "suitable_skin": [
+            "sensitive",
+            "dry",
+            "all"
+        ],
+        "unsuitable_skin": []
+    },
+    {
+        "name": "维生素C",
+        "aliases": [
+            "原型C",
+            "VC"
+        ],
+        "benefits": "抗氧化、美白祛斑、匀净肤色",
+        "risks": "部分剂型具有刺激性，需避光使用",
+        "suitable_skin": [
+            "normal",
+            "combination"
+        ],
+        "unsuitable_skin": [
+            "sensitive"
+        ]
+    },
+    {
+        "name": "角鲨烷",
+        "aliases": [],
+        "benefits": "滋润锁水、修护皮脂膜、软化角质",
+        "risks": "极低",
+        "suitable_skin": [
+            "dry",
+            "sensitive"
+        ],
+        "unsuitable_skin": [
+            "oil"
+        ]
+    },
+    {
+        "name": "泛醇",
+        "aliases": [
+            "维生素B5"
+        ],
+        "benefits": "深层保湿、修护、缓解刺激",
+        "risks": "极低",
+        "suitable_skin": [
+            "all"
+        ],
+        "unsuitable_skin": []
+    },
+    {
+        "name": "虾青素",
+        "aliases": [],
+        "benefits": "强效抗氧化、改善肤质、延缓衰老",
+        "risks": "极低",
+        "suitable_skin": [
+            "all"
+        ],
+        "unsuitable_skin": []
+    }
+]

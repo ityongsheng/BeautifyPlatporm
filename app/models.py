@@ -92,19 +92,38 @@ class RecommendationResult(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     score = models.FloatField(verbose_name="推荐匹配度")
     reason = models.TextField(blank=True, null=True, verbose_name="AI推荐理由")
+    
+    # 运营统计字段：用于CTR分析
+    view_count = models.IntegerField(default=0, verbose_name="展示次数")
+    click_count = models.IntegerField(default=0, verbose_name="点击次数")
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['-score']
 
-    # 5. AI对话日志：用于记录美妆顾问的交互历史
 
-
+# 5. AI对话日志：用于记录美妆顾问的交互历史
 class ChatLog(models.Model):
+    """
+    记录AI对话历史，包含Token消耗、响应延迟及人工纠偏逻辑。
+    """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     user_input = models.TextField(verbose_name="用户提问")
     ai_response = models.TextField(verbose_name="AI回答")
+    
+    # AI 消耗与性能监控
+    prompt_tokens = models.IntegerField(default=0, verbose_name="提示词Token")
+    completion_tokens = models.IntegerField(default=0, verbose_name="生成Token")
+    total_tokens = models.IntegerField(default=0, verbose_name="总消耗Token")
+    latency_ms = models.IntegerField(default=0, verbose_name="响应延迟(ms)")
+    
+    # 人工纠偏逻辑
+    is_corrected = models.BooleanField(default=False, verbose_name="是否已纠偏")
+    corrected_response = models.TextField(blank=True, null=True, verbose_name="人工纠偏结果")
+    
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "AI对话日志"
+        verbose_name_plural = verbose_name

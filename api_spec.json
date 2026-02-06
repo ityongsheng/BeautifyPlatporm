@@ -1,0 +1,39 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Beauty Platform AI API",
+    "description": "美妆垂类大模型推荐系统接口文档",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/api/recommend/": {
+      "get": {
+        "summary": "获取个性化推荐 (Get Personalized Recommendations)",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/chat/": {
+      "post": {
+        "summary": "AI 美妆顾问对话 (AI Makeup Consultant Chat)",
+        "parameters": [
+          {
+            "name": "message",
+            "in": "body",
+            "required": true
+          }
+        ]
+      }
+    },
+    "/api/admin/stats/": {
+      "get": {
+        "summary": "全平台运营数据大屏 (System Analytics Dashboard)"
+      }
+    }
+  }
+}

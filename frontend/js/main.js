@@ -22,13 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- State ---
     let currentUser = { id: 1, username: '美妆达人', skinType: 'normal' };
-    let chartInstance = null;
+    let radarChart = null;
+    let trendChart = null;
+    let pieChart = null;
 
     // --- Init ---
     initNavigation();
     initChat();
     initModal();
     initHomeInteractions();
+    initGlobalStats();
 
     // --- Login Flow ---
     document.getElementById('login-form').addEventListener('submit', (e) => {
@@ -37,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.textContent = '验证中...';
         currentUser.username = document.getElementById('username').value || '美妆达人';
 
-        // Sync username to banner
         document.querySelectorAll('.user-name-span').forEach(el => el.textContent = currentUser.username);
 
         setTimeout(() => {
@@ -95,10 +97,29 @@ document.addEventListener('DOMContentLoaded', () => {
             tab.addEventListener('click', () => {
                 tabs.forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
-                // Simulate filtering
                 loadRecommendations();
             });
         });
+    }
+
+    // --- Global Stats Logic ---
+    async function initGlobalStats() {
+        try {
+            const resp = await fetch('http://127.0.0.1:8000/api/global-stats/');
+            const data = await resp.json();
+
+            // Dynamic count increment
+            let count = data.users_helped;
+            const counterEl = document.getElementById('stat-ai-counter');
+            setInterval(() => {
+                count += Math.floor(Math.random() * 2);
+                counterEl.textContent = `AI 已提供 ${count.toLocaleString()}+ 避雷建议`;
+            }, 3000);
+
+            document.getElementById('stat-safety-counter').textContent = `安全监测 ${data.safety_checks.toLocaleString()}+ 次`;
+        } catch (err) {
+            console.error('Stats Error:', err);
+        }
     }
 
     // --- Data Fetching & Rendering ---
@@ -139,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
             document.getElementById('profile-skin-badge').textContent = data.skin_type;
             renderRadarChart(data.stats);
+            renderTrendChart(data.trend);
         } catch (err) {
             console.error('Profile Error:', err);
         }
@@ -147,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderProducts(items, containerId) {
         const list = document.getElementById(containerId);
         list.innerHTML = items.map(p => `
-            <div class="product-card" onclick="window.openProductDetail(${p.id || 0})">
+            <div class="product-card" onclick="window.openProductDetail(${p.product_id || p.id || 0})">
                 <div class="product-img">🧴</div>
                 <div class="product-info">
                     <div class="product-title">${p.title}</div>
@@ -183,12 +205,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderProducts(mock, 'product-list');
     }
 
-    // --- eCharts Radar Chart ---
+    // --- ECharts Visuals ---
     function renderRadarChart(stats) {
-        if (!chartInstance) {
-            chartInstance = echarts.init(document.getElementById('skin-radar-chart'));
-        }
+        if (!radarChart) radarChart = echarts.init(document.getElementById('skin-radar-chart'));
         const option = {
+            tooltip: {},
             radar: {
                 indicator: [
                     { name: '水分', max: 100 },
@@ -196,21 +217,61 @@ document.addEventListener('DOMContentLoaded', () => {
                     { name: '敏感度', max: 100 },
                     { name: '弹性', max: 100 },
                     { name: '光泽', max: 100 }
-                ],
-                splitArea: { show: false }
+                ]
             },
             series: [{
                 type: 'radar',
                 data: [{
                     value: [stats.moisture, stats.oil, stats.sensitivity, stats.elasticity, stats.shining],
-                    name: '肤质分析',
-                    areaStyle: { color: 'rgba(248, 201, 201, 0.5)' },
-                    lineStyle: { color: '#f8c9c9' },
-                    itemStyle: { color: '#f8c9c9' }
+                    name: '肤质状态',
+                    areaStyle: { color: 'rgba(212, 175, 55, 0.3)' },
+                    lineStyle: { color: 'var(--accent-color)' }
                 }]
             }]
         };
-        chartInstance.setOption(option);
+        radarChart.setOption(option);
+    }
+
+    function renderTrendChart(trend) {
+        if (!trendChart) trendChart = echarts.init(document.getElementById('skin-trend-chart'));
+        const option = {
+            tooltip: { trigger: 'axis' },
+            legend: { data: ['水分', '油分'], bottom: 0 },
+            xAxis: { type: 'category', data: trend.months },
+            yAxis: { type: 'value', max: 100 },
+            series: [
+                { name: '水分', type: 'line', data: trend.moisture, smooth: true, color: '#4a90e2' },
+                { name: '油分', type: 'line', data: trend.oil, smooth: true, color: '#f5a623' }
+            ]
+        };
+        trendChart.setOption(option);
+    }
+
+    function renderIngredientPieChart(ingredients) {
+        if (!pieChart) pieChart = echarts.init(document.getElementById('ingredient-pie-chart'));
+
+        // Mock parser: categorize ingredients
+        const functional = ingredients.filter(i => ["视黄醇", "烟酰胺", "维生素C", "水杨酸", "果酸"].some(k => i.includes(k)));
+        const soothing = ingredients.filter(i => ["积雪草", "神经酰胺", "泛醇", "透明质酸", "角鲨烷"].some(k => i.includes(k)));
+        const base = ingredients.filter(i => !functional.includes(i) && !soothing.includes(i));
+
+        const data = [
+            { value: functional.length || 1, name: '活性功能成分' },
+            { value: soothing.length || 2, name: '舒缓修护成分' },
+            { value: base.length || 5, name: '基础溶剂/基质' }
+        ];
+
+        const option = {
+            tooltip: { trigger: 'item' },
+            legend: { orient: 'vertical', left: 'left' },
+            series: [{
+                type: 'pie',
+                radius: '60%',
+                data: data,
+                emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' } }
+            }]
+        };
+        pieChart.setOption(option);
     }
 
     // --- Modal Logic ---
@@ -223,6 +284,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (id === 0) return;
         modal.style.display = 'flex';
         modalBody.innerHTML = '<h3>加载详情中...</h3>';
+        document.getElementById('ingredient-chart-container').style.display = 'none';
+
         try {
             const response = await fetch(`http://127.0.0.1:8000/api/product/${id}/`);
             const p = await response.json();
@@ -241,12 +304,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p style="margin-top: 10px;"><strong>功效建议：</strong>${p.efficacy}</p>
                 </div>
             `;
+
+            // Show Chart
+            document.getElementById('ingredient-chart-container').style.display = 'block';
+            setTimeout(() => {
+                const ings = p.ingredients.split(',').map(i => i.trim());
+                renderIngredientPieChart(ings);
+            }, 100);
+
         } catch (err) {
             modalBody.innerHTML = '<h3>加载详情失败</h3>';
         }
     };
 
-    // --- AI Chat Logic ---
+    // --- AI Chat Logic (Streaming & Prompt Meta) ---
     function initChat() {
         const input = document.getElementById('chat-input');
         const sendBtn = document.getElementById('send-chat');
@@ -259,8 +330,11 @@ document.addEventListener('DOMContentLoaded', () => {
             addMessage(text, 'user');
             input.value = '';
 
-            const loadingId = 'ai-loading-' + Date.now();
-            addMessage('医生正在思考...', 'ai', loadingId);
+            const aiMsgDiv = addMessage('', 'ai');
+            const statusText = document.createElement('div');
+            statusText.className = 'prompt-box';
+            statusText.innerHTML = `<span>🧠 AI 思考中...</span> <span class="toggle-prompt" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'">[查看思考过程]</span><div class="prompt-details"></div>`;
+            aiMsgDiv.appendChild(statusText);
 
             try {
                 const response = await fetch('http://127.0.0.1:8000/api/chat/', {
@@ -269,22 +343,40 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ message: text })
                 });
                 const data = await response.json();
-                document.getElementById(loadingId).textContent = data.reply || 'AI 暂时断线了，请稍后再试。';
+
+                // Show Prompt
+                statusText.querySelector('.prompt-details').textContent = data.prompt_used;
+                statusText.querySelector('span').textContent = '✅ 分析完成';
+
+                // Streaming Effect
+                streamText(data.reply, aiMsgDiv);
             } catch (err) {
-                document.getElementById(loadingId).textContent = '模型连接失败，请确认后端服务器已启动。';
+                aiMsgDiv.prepend('模型连接失败，请确认后端服务器已启动。');
             }
         };
+
+        function streamText(text, container) {
+            let i = 0;
+            const textNode = document.createTextNode('');
+            container.prepend(textNode);
+            const interval = setInterval(() => {
+                textNode.textContent += text[i];
+                i++;
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+                if (i >= text.length) clearInterval(interval);
+            }, 30);
+        }
 
         sendBtn.addEventListener('click', sendMessage);
         input.addEventListener('keypress', (e) => e.key === 'Enter' && sendMessage());
 
-        function addMessage(text, role, id) {
+        function addMessage(text, role) {
             const div = document.createElement('div');
             div.className = `message ${role}`;
-            if (id) div.id = id;
             div.textContent = text;
             msgContainer.appendChild(div);
             msgContainer.scrollTop = msgContainer.scrollHeight;
+            return div;
         }
     }
 });

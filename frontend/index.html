@@ -82,6 +82,7 @@
                 <a href="#" id="nav-rankings">热门榜单</a>
                 <a href="#" id="nav-chat">AI 顾问</a>
                 <a href="#" id="nav-profile">个人中心</a>
+                <a href="admin.html" style="font-size: 0.8rem; opacity: 0.5; margin-left:15px">管理员入口</a>
             </div>
             <div class="user-status" style="font-size: 0.9rem; color: #888">
                 <span>我的肤质: <strong id="user-skin-tag">-</strong></span>
@@ -91,6 +92,13 @@
         <main class="content-area">
             <!-- Home Section -->
             <section id="section-home">
+                <!-- Global Dynamic Stats Bar -->
+                <div class="global-stats-bar" id="global-stats-bar">
+                    <span class="stat-item">🚀 正在为您守护美丽</span>
+                    <span class="stat-item" id="stat-ai-counter">AI 已提供 1,200+ 避雷建议</span>
+                    <span class="stat-item" id="stat-safety-counter">安全监测 5,000+ 次</span>
+                </div>
+
                 <!-- New Hero Banner -->
                 <div class="hero-banner">
                     <div class="hero-text">
@@ -180,6 +188,10 @@
                             <h3>肤质多维度深度分析</h3>
                             <div id="skin-radar-chart" style="width: 100%; height: 350px;"></div>
                         </div>
+                        <div class="chart-card">
+                            <h3>肤质动态演变趋势（近半年）</h3>
+                            <div id="skin-trend-chart" style="width: 100%; height: 350px;"></div>
+                        </div>
                         <div class="history-card">
                             <h3>最近足迹</h3>
                             <ul class="history-list" id="history-list">
@@ -198,6 +210,10 @@
             <span class="close-modal">&times;</span>
             <div class="modal-body" id="modal-body-content">
                 <!-- Data will be injected -->
+            </div>
+            <div id="ingredient-chart-container" style="display: none; margin-top: 20px;">
+                <h4>📊 成分科学分析比例</h4>
+                <div id="ingredient-pie-chart" style="width: 100%; height: 300px;"></div>
             </div>
         </div>
     </div>
